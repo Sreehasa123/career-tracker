@@ -1,3 +1,6 @@
+from google_auth_oauthlib.flow import Flow
+import os
+
 from flask import Flask, render_template
 import sqlite3
 
@@ -37,6 +40,32 @@ def create_database():
 def home():
 
     return render_template("index.html")
+
+@app.route("/connect-gmail")
+def connect_gmail():
+
+    flow = Flow.from_client_secrets_file(
+        "credentials.json",
+        scopes=[
+            "https://www.googleapis.com/auth/gmail.readonly"
+        ]
+    )
+
+    flow.redirect_uri = "http://127.0.0.1:5000/oauth2callback"
+
+    authorization_url, state = flow.authorization_url(
+        access_type="offline",
+        include_granted_scopes="true"
+    )
+
+    return redirect(authorization_url)
+
+
+
+@app.route("/oauth2callback")
+def oauth2callback():
+
+    return "Gmail Connected Successfully!"
 
 
 
