@@ -43,6 +43,4 @@ def home():
 # Run database creation first
 create_database()
 
-
-# Start Flask app
-app.run(debug=True)
+app.run(host="0.0.0.0", port=5000)
